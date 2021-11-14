@@ -1,0 +1,7 @@
+-  avoid overlapping of mons
+-  seg faults on repated start
+//-  collectibe apearing after being collected and crossed by the player
+- improve mons tracking
+- insert loading and exit graphics
+- exit and free functions
+- mon still eating coll

@@ -30,6 +30,8 @@ typedef struct s_game
     void	*win_ptr;
     int		pos_p;
     int		*pos_ms;
+    int     *pos_col;
+    int     pos_exit;
     int     mon_count;
     int     col_count;
     int		g_mon_ctr;
