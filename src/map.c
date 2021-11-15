@@ -6,30 +6,48 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 17:18:30 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/14 18:56:25 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/15 20:49:43 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
 
+void err_handling(char *err_msg)
+{
+	printf("%s\n", err_msg);
+	exit(-1);
+}
+
 void	check_map(t_map_data *map_data)
 {
 	char **temp;
+	int		i;
+	int		j;
 
+	map_data->map_height = 0;
+	map_data->map_width = 0;
 	temp = ft_split(map_data->map, '\n');
 	map_data->map_width = ft_strlen(temp[0]);
-	int i = 0;
+	i = 0;
 	while(temp[i])
 	{
+		j = 0;
 		if((int)ft_strlen(temp[i]) != map_data->map_width)
-			break ;
+			err_handling("error: map should be rectangular."); //error varying width
+		while (temp[i][j])
+		{
+			if ( temp[i][j] != '1' && (i == 0 || temp[i + 1] == NULL))
+				err_handling("error: map should be surrounded by walls."); //error varying width
+			j++;
+		}
 		map_data->map_height++;
 		i++;
 	}
+	
 	free_dp(temp);
 	//TODO validate map
 		// all elements are avalaible
-	// printf("width %d, height %d", map_data->map_width, map_data->map_height);
+	printf("width %d, height %d", map_data->map_width, map_data->map_height);
 }
 
 void	init_map(char *map_path, t_map_data *map_data)

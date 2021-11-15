@@ -63,14 +63,7 @@ void	update_pos(t_map_data *map_data)
 	}
 }
 
-void	game_end(int pass)
-{
-	if (pass)
-	{
 
-	}
-
-}
 
 void	game_status(t_map_data *map_data)
 {
@@ -93,37 +86,44 @@ void	game_status(t_map_data *map_data)
 	}
 }
 
-void	move(char id, int pos_x, char dir, t_map_data *map_data)
+int	next_pos(char id, char dir, int pos, t_map_data *map_data)
 {
-	if (dir == 'A' && map_data->map[pos_x - 1] != '1')
+	char	*map;
+	int 	width;
+
+	map = map_data->map;
+	width = map_data->map_width;
+	if (id == 'P')
 	{
-		map_data->map[pos_x] = '0';
-		map_data->map[pos_x - 1] = id;
-	}
-	if (dir == 'S' && (map_data->map[pos_x + map_data->map_width + 1] != '1'))
-	{
-		map_data->map[pos_x] = '0';
-		map_data->map[pos_x + map_data->map_width + 1] = id;
-	}
-	if (dir == 'D' && map_data->map[pos_x + 1] != '1')
-	{
-		map_data->map[pos_x] = '0';
-		map_data->map[pos_x + 1] = id;
-	}
-	if (dir == 'W' && (map_data->map[pos_x - map_data->map_width - 1] != '1'))
-	{
-		map_data->map[pos_x] = '0';
-		map_data->map[pos_x - map_data->map_width - 1] = id;
+		if (dir == 'A' && map[pos - 1] != '1' && map[pos - 1] != 'E')
+			return (pos - 1);
+		if (dir == 'S' && map[pos + width + 1] != '1' && map[pos + width + 1] != 'E')
+			return (pos + width + 1);
+		if (dir == 'D' && map[pos + 1] != '1' &&  map[pos + 1] != 'E')
+			return (pos + 1);
+		if (dir == 'W' && map[pos - width - 1] != '1' && map[pos - width - 1] != 'E')
+			return (pos - width - 1);
 	}
 	if (id == 'M')
 	{
-		int j = 0;
-		while(j < g_game.col_count)
-		{
-			if (g_game.pos_col[j++] == pos_x)
-				map_data->map[pos_x] = 'C';
-		}
+		if (dir == 'A' && map[pos - 1] != '1' &&  map[pos - 1] != 'M')
+			return (pos - 1);
+		if (dir == 'S' && map[pos + width + 1] != '1' &&  map[pos + width + 1] != 'M')
+			return (pos + width + 1);
+		if (dir == 'D' && map[pos + 1] != '1' &&  map[pos + 1] != 'M')
+			return (pos + 1);
+		if (dir == 'W' && map[pos - width - 1] != '1' &&  map[pos - width - 1] != 'M')
+			return (pos - width - 1);
 	}
+	return (pos);
+}
+
+
+void	move(char id, int pos, char dir, t_map_data *map_data)
+{
+	map_data->map[next_pos(id, dir, pos, map_data)] = id;
+	map_data->map[pos] = '0';
+
 	game_status(map_data);
 	update_pos(map_data);
 	load_map(map_data);
@@ -137,17 +137,50 @@ int abs(int n)
 	return (n);
 }
 
+
+
 int	plyr_move(int keycode, t_map_data *map_data)
 {
+	map_data->map[g_game.pos_p] = '0';
 	if (keycode == 0)
-		move('P', g_game.pos_p, 'A', map_data);
+		map_data->map[next_pos('P', 'A', g_game.pos_p, map_data)] = 'P';
 	if (keycode == 1)
-		move('P', g_game.pos_p, 'S', map_data);
+		map_data->map[next_pos('P', 'S', g_game.pos_p, map_data)] = 'P';
 	if (keycode == 2)
-		move('P', g_game.pos_p, 'D', map_data);
+		map_data->map[next_pos('P', 'D', g_game.pos_p, map_data)] = 'P';
 	if (keycode == 13)
-		move('P', g_game.pos_p, 'W', map_data);	
+		map_data->map[next_pos('P', 'W', g_game.pos_p, map_data)] = 'P';
+	game_status(map_data);
+	update_pos(map_data);
+	load_map(map_data);
+	g_game.steps++;
 	return(0);
+}
+
+int	is_member(int x, int *a, int len)
+{
+	int i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (a[i] == x)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char plyr_dir(int pos_m, int pos_p, t_map_data *map_data)
+{
+	if ((pos_m - pos_p) > map_data->map_width)
+		return ('W');
+	if ((pos_p - pos_m) > map_data->map_width)
+		return ('S');
+	if (pos_p > pos_m)
+		return ('D');
+	else
+		return ('A');
 }
 
 int	mon_move(t_map_data *map_data)
@@ -155,20 +188,25 @@ int	mon_move(t_map_data *map_data)
 	int i;
 
 	i = 0;
-	if (g_game.loop_cnt++ % 2000 != 0)
+	g_game.loop_cnt++;
+	if (g_game.loop_cnt % 1000 != 0)
 		return (1);
 	while(i < g_game.mon_count)
 	{
-		if (g_game.pos_ms[i] > g_game.pos_p && g_game.loop_cnt % 4000 == 0)
-			move('M', g_game.pos_ms[i], 'W', map_data);
-		else if( g_game.loop_cnt % 4000 == 0)
-			move('M', g_game.pos_ms[i], 'S', map_data);
-		if (g_game.pos_ms[i] > g_game.pos_p && g_game.loop_cnt % 4000 == 0)		
-			move('M', g_game.pos_ms[i], 'A', map_data);
-		else if( g_game.loop_cnt % 4000 == 0)
-			move('M', g_game.pos_ms[i], 'D', map_data);
-		move('M', g_game.pos_ms[i], "WASD"[rand() % 4], map_data);
+		if (is_member(g_game.pos_ms[i], g_game.pos_col, g_game.col_count))
+			map_data->map[g_game.pos_ms[i]] = 'C';
+		else	
+			map_data->map[g_game.pos_ms[i]] = '0';
+		if (g_game.loop_cnt % 2000 == 0)
+			map_data->map[next_pos('M', plyr_dir(g_game.pos_ms[i], g_game.pos_p, map_data),
+			g_game.pos_ms[i], map_data)] = 'M';
+		else
+			map_data->map[next_pos('M', "WASD"[rand() % 4], g_game.pos_ms[i], map_data)] = 'M';
 		i++;
 	}
+	game_status(map_data);
+	update_pos(map_data);
+	load_map(map_data);
+	g_game.steps++;
 	return (0);
 }

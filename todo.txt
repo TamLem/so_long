@@ -1,7 +1,20 @@
--  avoid overlapping of mons
--  seg faults on repated start
+====== DONE ===========
+
+//-  avoid overlapping of mons
 //-  collectibe apearing after being collected and crossed by the player
+//- mon still eating coll
+//- escape game key
 - improve mons tracking
-- insert loading and exit graphics
+
+====== TODO ===========
+
+- check map
 - exit and free functions
-- mon still eating coll
+- insert loading and exit graphics
+- door images
+- multiple player images
+- implement move counter
+
+===== ERRORS =========
+
+-  seg faults on repated start
