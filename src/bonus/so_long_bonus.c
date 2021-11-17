@@ -17,6 +17,7 @@ void	game_end(char status, t_map_data *map_data)
 	free(g_game.pos_col);
 	free(g_game.pos_ms);
 	free(map_data->map);
+	free(map_data->initial_map);
 	exit(0);
 }
 
@@ -42,7 +43,7 @@ int		main(void)
 	g_game.loop_cnt = 1;
 	g_game.g_status = 1;
 	
-	init_map("assets/maps/map3.ber", &map_data);
+	init_map("assets/maps/map4.ber", &map_data);
 	check_map(&map_data);
 	init_imgs(&map_data);
 	init_bottom_imgs(&map_data);

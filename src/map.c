@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 17:18:30 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/17 15:18:33 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/17 18:19:31 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,16 @@ void	init_imgs(t_map_data *map_data)
 						&(map_data->imgs[8].img_width), &(map_data->imgs[8].img_height));
 	map_data->imgs[9].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, WIN, 
 						&(map_data->imgs[9].img_width), &(map_data->imgs[9].img_height));
+	int i = 0;
+	while (i < 10)
+	{
+		if (map_data->imgs[i].img_xpm == NULL)
+		{
+			printf("NUll XPM");
+			exit(0);
+		}
+		i++;
+	}
 }
 
 void	load_img(t_img imgs[], char c, int *pos_x, int *pos_y)

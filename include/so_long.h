@@ -75,6 +75,8 @@ void	check_map(t_map_data *map_data);
 void	update_pos(t_map_data *map_data);
 void    init_pos(t_map_data *map_data);
 void    init_bottom_imgs(t_map_data *map_data);
+void    err_handling(char *err_msg);
+
 
 
 #endif

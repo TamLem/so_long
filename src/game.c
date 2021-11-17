@@ -20,18 +20,18 @@ void init_pos(t_map_data *map_data)
 	g_game.pos_ms = (int *)malloc(g_game.mon_count);
 	g_game.pos_col = (int *)malloc(g_game.col_count);
 	if (g_game.pos_ms == NULL || g_game.pos_col == NULL)
-		return ; //add error f()
+		err_handling("internal memory error!");
 	i = 0;
-	k = g_game.col_count;
-	j = g_game.mon_count;
+	k = 0;
+	j = 0;
 	while(map_data->map[i]) 
 	{
 		if (map_data->map[i] == 'P')
 				g_game.pos_p = i;
 		if (map_data->map[i] == 'M')
-			g_game.pos_ms[--j] = i;
+			g_game.pos_ms[j++] = i;
 		if (map_data->map[i] == 'C')
-			g_game.pos_col[--k] = i;
+			g_game.pos_col[k++] = i;
 		if (map_data->map[i] == 'E')
 			g_game.pos_exit = i;
 		i++;
