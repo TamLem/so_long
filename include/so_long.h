@@ -21,7 +21,9 @@ typedef struct s_map_data
     int     map_height;
     int     map_len;
     char    *map;
-    t_img   imgs[7];
+    char    *initial_map;
+    t_img   imgs[10];
+    t_img   nums[10];
 }              t_map_data;
 
 typedef struct s_game
@@ -34,7 +36,7 @@ typedef struct s_game
     int     pos_exit;
     int     mon_count;
     int     col_count;
-    int		g_mon_ctr;
+    int		g_status;
     int     loop_cnt;
     int     steps;
 }               t_game;
@@ -46,9 +48,21 @@ t_game  g_game;
 #define WALL "assets/pacman/wall.xpm"
 #define EMPTY "assets/pacman/empty.xpm"
 #define EXIT "assets/pacman/exit.xpm"
-#define MON1 "assets/pacman/mon1.xpm"
+#define MON "assets/pacman/mon.xpm"
 #define END "assets/pacman/game_end.xpm"
-
+#define ZERO "assets/pacman/nums/0.xpm"
+#define ONE "assets/pacman/nums/1.xpm"
+#define TWO "assets/pacman/nums/2.xpm"
+#define THREE "assets/pacman/nums/3.xpm"
+#define FOUR "assets/pacman/nums/4.xpm"
+#define FIVE "assets/pacman/nums/5.xpm"
+#define SIX "assets/pacman/nums/6.xpm"
+#define SEVEN "assets/pacman/nums/7.xpm"
+#define EIGHT "assets/pacman/nums/8.xpm"
+#define NINE "assets/pacman/nums/9.xpm"
+#define MOVES "assets/pacman/nums/moves.xpm"
+#define LOSE "assets/pacman/gameover.xpm"
+#define WIN "assets/pacman/win.xpm"
 
 
 void	free_dp(char **i);
@@ -60,6 +74,7 @@ void	load_map(t_map_data *map_data);
 void	check_map(t_map_data *map_data);
 void	update_pos(t_map_data *map_data);
 void    init_pos(t_map_data *map_data);
+void    init_bottom_imgs(t_map_data *map_data);
 
 
 #endif

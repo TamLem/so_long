@@ -9,6 +9,23 @@ void	free_dp(char **i)
 	}
 }
 
+// void	move(char id, int pos, char dir, t_map_data *map_data)
+// {
+// 	map_data->map[next_pos(id, dir, pos, map_data)] = id;
+// 	map_data->map[pos] = '0';
+// 	game_status(map_data);
+// 	update_pos(map_data);
+// 	load_map(map_data);
+// 	g_game.steps++;
+// }
+
+// int abs(int n)
+// {
+// 	if (n < 0)
+// 		return(-1 * n);
+// 	return (n);
+// }
+
 // void	print_circle(int c_x, int c_y, int rad)
 // {
 //     int	x;
