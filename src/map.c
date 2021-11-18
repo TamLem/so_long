@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 17:18:30 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/17 18:19:31 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/18 18:25:44 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,11 @@ void	init_map(char *map_path, t_map_data *map_data)
 	int	fd;
 	char c;
 	int len;
-	char **temp;
 
 	len = 0;
 	fd = open(map_path, O_RDONLY); //TODO error handling
 	if(fd == -1)
-		perror("map");
+		err_handling("map");
 	while(read(fd, &c, 1))
 		len++;
 	close(fd);
@@ -110,7 +109,7 @@ void	init_imgs(t_map_data *map_data)
 							&(map_data->imgs[2].img_width), &(map_data->imgs[2].img_height));
 	map_data->imgs[3].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, COLL, 
 							&(map_data->imgs[3].img_width), &(map_data->imgs[3].img_height));
-	map_data->imgs[4].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, EXIT, 
+	map_data->imgs[4].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, DOOR_C, 
 							&(map_data->imgs[4].img_width), &(map_data->imgs[4].img_height));
 	map_data->imgs[5].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, MON, 
 							&(map_data->imgs[5].img_width), &(map_data->imgs[5].img_height));
@@ -122,13 +121,15 @@ void	init_imgs(t_map_data *map_data)
 						&(map_data->imgs[8].img_width), &(map_data->imgs[8].img_height));
 	map_data->imgs[9].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, WIN, 
 						&(map_data->imgs[9].img_width), &(map_data->imgs[9].img_height));
+	map_data->imgs[10].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, DOOR_O, 
+						&(map_data->imgs[10].img_width), &(map_data->imgs[10].img_height));
 	int i = 0;
 	while (i < 10)
 	{
 		if (map_data->imgs[i].img_xpm == NULL)
 		{
-			printf("NUll XPM");
-			exit(0);
+			printf("NUll XPM at index %d", i);
+			err_handling("Couldn't find images");
 		}
 		i++;
 	}
@@ -140,12 +141,14 @@ void	load_img(t_img imgs[], char c, int *pos_x, int *pos_y)
 		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[0].img_xpm, *pos_x, *pos_y);
 	if (c == '1')
 		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[1].img_xpm, *pos_x, *pos_y);
-	if (c == 'C')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[3].img_xpm, *pos_x, *pos_y);
-	if (c == 'E')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[4].img_xpm, *pos_x, *pos_y);
 	if (c == 'P')
 		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[2].img_xpm, *pos_x, *pos_y);
+	if (c == 'C')
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[3].img_xpm, *pos_x, *pos_y);
+	if (c == 'E' && g_game.col_count)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[4].img_xpm, *pos_x, *pos_y);
+	if (c == 'E' && !g_game.col_count)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[10].img_xpm, *pos_x, *pos_y);
 	if (c == 'M')
 		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[5].img_xpm, *pos_x, *pos_y);
 	*pos_x += 32;
@@ -191,7 +194,5 @@ void	load_map(t_map_data *map_data)
 	mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
 		map_data->imgs[7].img_xpm, 0, pos_y);
 	pos_x = 150;
-	show_steps(g_game.steps, &pos_x, &pos_y, map_data);
-
-	
+	show_steps(g_game.col_count, &pos_x, &pos_y, map_data);
 }

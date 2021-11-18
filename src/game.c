@@ -1,66 +1,5 @@
 #include "../include/so_long.h"
 
-void init_pos(t_map_data *map_data)
-{
-	int	i;
-	int	j;
-	int k;
-
-	i = 0;
-	g_game.mon_count = 0;
-	g_game.col_count = 0;
-	while (map_data->map[i])
-	{
-		if (map_data->map[i] == 'M')
-			g_game.mon_count++;
-		if (map_data->map[i] == 'C')
-			g_game.col_count++;
-		i++;
-	}
-	g_game.pos_ms = (int *)malloc(g_game.mon_count);
-	g_game.pos_col = (int *)malloc(g_game.col_count);
-	if (g_game.pos_ms == NULL || g_game.pos_col == NULL)
-		err_handling("internal memory error!");
-	i = 0;
-	k = 0;
-	j = 0;
-	while(map_data->map[i]) 
-	{
-		if (map_data->map[i] == 'P')
-				g_game.pos_p = i;
-		if (map_data->map[i] == 'M')
-			g_game.pos_ms[j++] = i;
-		if (map_data->map[i] == 'C')
-			g_game.pos_col[k++] = i;
-		if (map_data->map[i] == 'E')
-			g_game.pos_exit = i;
-		i++;
-	}
-}
-
-void	update_pos(t_map_data *map_data)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	g_game.col_count = 0;
-	while (map_data->map[i])
-	{
-		if (map_data->map[i] == 'C')
-			g_game.col_count++;
-		i++;
-	}
-	i = 0;
-	j = g_game.mon_count;
-	while(map_data->map[i]) 
-	{
-		if (map_data->map[i] == 'M')
-			g_game.pos_ms[--j] = i;
-		i++;
-	}
-}
-
 void	game_status(t_map_data *map_data)
 {
 	int i;
@@ -84,42 +23,6 @@ void	game_status(t_map_data *map_data)
 	}
 }
 
-int	next_pos(char id, char dir, int pos, t_map_data *map_data)
-{
-	char	*map;
-	int 	width;
-
-	map = map_data->map;
-	width = map_data->map_width;
-	if (id == 'P')
-	{
-		if (dir == 'A' && map[pos - 1] != '1' 
-			&& (map[pos - 1] != 'E' || g_game.col_count == 0))
-			return (pos - 1);
-		if (dir == 'S' && map[pos + width + 1] != '1' 
-			&& (map[pos + width + 1] != 'E' || g_game.col_count == 0))
-			return (pos + width + 1);
-		if (dir == 'D' && map[pos + 1] != '1' 
-			&& (map[pos + 1] != 'E' || g_game.col_count == 0))
-			return (pos + 1);
-		if (dir == 'W' && map[pos - width - 1] != '1' 
-			&& (map[pos - width - 1] != 'E' || g_game.col_count == 0))
-			return (pos - width - 1);
-	}
-	if (id == 'M')
-	{
-		if (dir == 'A' && map[pos - 1] != '1' &&  map[pos - 1] != 'M')
-			return (pos - 1);
-		if (dir == 'S' && map[pos + width + 1] != '1' &&  map[pos + width + 1] != 'M')
-			return (pos + width + 1);
-		if (dir == 'D' && map[pos + 1] != '1' &&  map[pos + 1] != 'M')
-			return (pos + 1);
-		if (dir == 'W' && map[pos - width - 1] != '1' &&  map[pos - width - 1] != 'M')
-			return (pos - width - 1);
-	}
-	return (pos);
-}
-
 int	arr_includes(int x, int *a, int len)
 {
 	int i;
@@ -136,7 +39,6 @@ int	arr_includes(int x, int *a, int len)
 
 int	plyr_move(int keycode, t_map_data *map_data)
 {
-	int col_pos;
 	int last_pos;
 
 	last_pos = g_game.pos_p;
@@ -151,14 +53,16 @@ int	plyr_move(int keycode, t_map_data *map_data)
 		g_game.pos_p = next_pos('P', 'W', g_game.pos_p, map_data);
 	map_data->map[g_game.pos_p] = 'P';
 	if ( map_data->initial_map[g_game.pos_p] == 'C') 
+	{
+			g_game.col_count--;
 			map_data->initial_map[g_game.pos_p] = '0';
+	}
 	load_map(map_data);
 	if(last_pos != g_game.pos_p)
 			g_game.steps++;
 	game_status(map_data);
 	return(0);
 }
-
 
 char plyr_dir(int pos_m, int pos_p, t_map_data *map_data)
 {

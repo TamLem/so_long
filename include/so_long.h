@@ -22,7 +22,7 @@ typedef struct s_map_data
     int     map_len;
     char    *map;
     char    *initial_map;
-    t_img   imgs[10];
+    t_img   imgs[11];
     t_img   nums[10];
 }              t_map_data;
 
@@ -47,7 +47,8 @@ t_game  g_game;
 #define COLL "assets/pacman/collectible.xpm"
 #define WALL "assets/pacman/wall.xpm"
 #define EMPTY "assets/pacman/empty.xpm"
-#define EXIT "assets/pacman/exit.xpm"
+#define DOOR_C "assets/pacman/door0.xpm"
+#define DOOR_O "assets/pacman/door1.xpm"
 #define MON "assets/pacman/mon.xpm"
 #define END "assets/pacman/game_end.xpm"
 #define ZERO "assets/pacman/nums/0.xpm"
@@ -76,7 +77,8 @@ void	update_pos(t_map_data *map_data);
 void    init_pos(t_map_data *map_data);
 void    init_bottom_imgs(t_map_data *map_data);
 void    err_handling(char *err_msg);
-
-
+void	init_pos(t_map_data *map_data);
+void	update_pos(t_map_data *map_data);
+int		next_pos(char id, char dir, int pos, t_map_data *map_data);
 
 #endif
