@@ -1,10 +1,32 @@
 #include "../include/so_long.h"
 
+void	err_handling(char *err_msg)
+{
+	printf("Error\n%s\n", err_msg);
+	exit(-1);
+}
+
 void	free_dp(char **i)
 {
 	while (*i)
 	{
 		free(*i);
+		i++;
+	}
+}
+
+void	check_imgs(t_img *imgs, int len)
+{
+	int	i;
+
+	i = 0;
+	while (i < len)
+	{
+		if (imgs[i].img_xpm == NULL)
+		{
+			printf("%d\t %d\n", len, i);
+			err_handling("missing game resources!");
+		}
 		i++;
 	}
 }

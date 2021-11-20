@@ -6,21 +6,15 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 17:18:30 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/18 21:58:16 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/20 18:40:48 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
 
-void err_handling(char *err_msg)
-{
-	printf("Error\n%s\n", err_msg);
-	exit(-1);
-}
-
 void	check_map(t_map_data *map_data)
 {
-	char **temp;
+	char	**temp;
 	int		i;
 	int		j;
 
@@ -29,38 +23,39 @@ void	check_map(t_map_data *map_data)
 	temp = ft_split(map_data->map, '\n');
 	map_data->map_width = ft_strlen(temp[0]);
 	i = 0;
-	while(temp[i])
+	while (temp[i])
 	{
 		j = 0;
-		if((int)ft_strlen(temp[i]) != map_data->map_width)
-			err_handling("map should be rectangular."); //error varying width
+		if ((int)ft_strlen(temp[i]) != map_data->map_width)
+			err_handling("map should be rectangular.");
 		while (temp[i][j])
 		{
-			if ( (temp[i][j] != '1' && (i == 0 || temp[i + 1] == NULL)) 
+			if ((temp[i][j] != '1' && (i == 0 || temp[i + 1] == NULL))
 				|| (temp[i][0] != '1' || temp[i][map_data->map_width - 1] != '1'))
-				err_handling("map should be surrounded by walls."); //error varying width
+				err_handling("map should be surrounded by walls.");
 			j++;
 		}
 		map_data->map_height++;
 		i++;
 	}
 	if (ft_strchr(map_data->map, 'C') == NULL || ft_strchr(map_data->map, 'P') == NULL
-		|| ft_strchr(map_data->map, 'E') == NULL ||  ft_strchr(map_data->map, '0') == NULL)
+		|| ft_strchr(map_data->map, 'E') == NULL
+		|| ft_strchr(map_data->map, '0') == NULL)
 		err_handling("map should contain all elements.");
 	free_dp(temp);
 }
 
 void	init_map(char *map_path, t_map_data *map_data)
 {
-	int	fd;
-	char c;
-	int len;
+	int		fd;
+	char	c;
+	int		len;
 
 	len = 0;
-	fd = open(map_path, O_RDONLY); //TODO error handling
-	if(fd == -1)
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
 		err_handling("map");
-	while(read(fd, &c, 1))
+	while (read(fd, &c, 1))
 		len++;
 	close(fd);
 	map_data->map = (char *)malloc(len + 1);
@@ -74,20 +69,22 @@ void	init_map(char *map_path, t_map_data *map_data)
 	ft_strlcpy(map_data->initial_map, map_data->map, len);
 }
 
-
-
 void	load_player(t_map_data *map_data, int *pos_x, int *pos_y)
 {
 	static int	frame = 0;
 
-	if(g_game.last_key == 0)
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, map_data->p_imgs[1][frame].img_xpm, *pos_x, *pos_y);
-	if(g_game.last_key == 13)
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, map_data->p_imgs[2][frame].img_xpm, *pos_x, *pos_y);
-	if(g_game.last_key == 1)
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, map_data->p_imgs[3][frame].img_xpm, *pos_x, *pos_y);	
-	if(g_game.last_key == 2) 
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, map_data->p_imgs[0][frame].img_xpm, *pos_x, *pos_y);
+	if (g_game.last_key == 0)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
+			map_data->p_imgs[1][frame].img_xpm, *pos_x, *pos_y);
+	if (g_game.last_key == 13)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
+			map_data->p_imgs[2][frame].img_xpm, *pos_x, *pos_y);
+	if (g_game.last_key == 1)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
+			map_data->p_imgs[3][frame].img_xpm, *pos_x, *pos_y);
+	if (g_game.last_key == 2)
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
+			map_data->p_imgs[0][frame].img_xpm, *pos_x, *pos_y);
 	*pos_x += 32;
 	if (++frame == 4)
 		frame = 0;
@@ -96,19 +93,23 @@ void	load_player(t_map_data *map_data, int *pos_x, int *pos_y)
 void	load_img(t_img imgs[], char c, int *pos_x, int *pos_y)
 {
 	if (c == '0')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[0].img_xpm, *pos_x, *pos_y);
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[0].img_xpm, *pos_x, *pos_y);
 	if (c == '1')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[1].img_xpm, *pos_x, *pos_y);
-	// if (c == 'P')
-	// 	mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[2].img_xpm, *pos_x, *pos_y);
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[1].img_xpm, *pos_x, *pos_y);
 	if (c == 'C')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[3].img_xpm, *pos_x, *pos_y);
-	if (c == 'E' && g_game.col_count)
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[4].img_xpm, *pos_x, *pos_y);
-	if (c == 'E' && !g_game.col_count)
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[10].img_xpm, *pos_x, *pos_y);
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[4].img_xpm, *pos_x, *pos_y);
+	if (c == 'E' && g_game.n_col)
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[3].img_xpm, *pos_x, *pos_y);
+	if (c == 'E' && !g_game.n_col)
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[2].img_xpm, *pos_x, *pos_y);
 	if (c == 'M')
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, imgs[5].img_xpm, *pos_x, *pos_y);
+		mlx_put_image_to_window(g_game.mlx_ptr,
+			g_game.win_ptr, imgs[5].img_xpm, *pos_x, *pos_y);
 	*pos_x += 32;
 }
 
@@ -116,8 +117,8 @@ void	show_steps(int n, int *pos_x, int *pos_y, t_map_data *map_data)
 {
 	if (n < 10)
 	{
-		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr, 
-		map_data->nums[n].img_xpm, *pos_x, *pos_y);
+		mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
+			map_data->num_imgs[n].img_xpm, *pos_x, *pos_y);
 		*pos_x += 32;
 	}
 	if (n > 10)
@@ -127,16 +128,15 @@ void	show_steps(int n, int *pos_x, int *pos_y, t_map_data *map_data)
 	}
 }
 
-
 void	load_map(t_map_data *map_data)
 {
-	int		pos_x = 0;
-	int		pos_y = 0;
+	int		pos_x;
+	int		pos_y;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
+	pos_x = 0;
+	pos_y = 0;
 	while (map_data->map[i])
 	{	
 		if (map_data->map[i] == '\n')
@@ -146,13 +146,13 @@ void	load_map(t_map_data *map_data)
 		}
 		else if (map_data->map[i] == 'P')
 			load_player(map_data, &pos_x, &pos_y);
-		else 
-			load_img(map_data->imgs, map_data->map[i], &pos_x, &pos_y);
+		else
+			load_img(map_data->base_imgs, map_data->map[i], &pos_x, &pos_y);
 		i++;
 	}
 	pos_y += 32;
 	mlx_put_image_to_window(g_game.mlx_ptr, g_game.win_ptr,
-		map_data->imgs[7].img_xpm, 0, pos_y);
+		map_data->base_imgs[7].img_xpm, 0, pos_y);
 	pos_x = 150;
-	show_steps(g_game.col_count, &pos_x, &pos_y, map_data);
+	show_steps(g_game.steps, &pos_x, &pos_y, map_data);
 }
