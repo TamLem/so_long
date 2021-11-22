@@ -6,7 +6,7 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/18 21:07:43 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/20 17:30:44 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/21 19:57:40 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,17 +44,17 @@ void	init_base_imgs(t_map_data *map_data)
 	t_img	*imgs;
 
 	imgs = map_data->base_imgs;
-	imgs[0].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, EMPTY,
+	imgs[0].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, EMPTY_IMG,
 			&(imgs[0].img_width), &(imgs[0].img_height));
-	imgs[1].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, WALL,
+	imgs[1].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, WALL_IMG,
 			&(imgs[1].img_width), &(imgs[1].img_height));
 	imgs[2].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, DOOR_O,
 			&(imgs[2].img_width), &(imgs[2].img_height));
 	imgs[3].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, DOOR_C,
 			&(imgs[3].img_width), &(imgs[3].img_height));
-	imgs[4].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, COLL,
+	imgs[4].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, COLL_IMG,
 			&(imgs[4].img_width), &(imgs[4].img_height));
-	imgs[5].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, MON,
+	imgs[5].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, MON_IMG,
 			&(imgs[5].img_width), &(imgs[5].img_height));
 	imgs[6].img_xpm = mlx_xpm_file_to_image(g_game.mlx_ptr, END,
 			&(imgs[6].img_width), &(imgs[6].img_height));

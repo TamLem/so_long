@@ -6,44 +6,11 @@
 /*   By: tlemma <tlemma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 17:18:30 by tlemma            #+#    #+#             */
-/*   Updated: 2021/11/20 18:40:48 by tlemma           ###   ########.fr       */
+/*   Updated: 2021/11/21 19:57:44 by tlemma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/so_long.h"
-
-void	check_map(t_map_data *map_data)
-{
-	char	**temp;
-	int		i;
-	int		j;
-
-	map_data->map_height = 0;
-	map_data->map_width = 0;
-	temp = ft_split(map_data->map, '\n');
-	map_data->map_width = ft_strlen(temp[0]);
-	i = 0;
-	while (temp[i])
-	{
-		j = 0;
-		if ((int)ft_strlen(temp[i]) != map_data->map_width)
-			err_handling("map should be rectangular.");
-		while (temp[i][j])
-		{
-			if ((temp[i][j] != '1' && (i == 0 || temp[i + 1] == NULL))
-				|| (temp[i][0] != '1' || temp[i][map_data->map_width - 1] != '1'))
-				err_handling("map should be surrounded by walls.");
-			j++;
-		}
-		map_data->map_height++;
-		i++;
-	}
-	if (ft_strchr(map_data->map, 'C') == NULL || ft_strchr(map_data->map, 'P') == NULL
-		|| ft_strchr(map_data->map, 'E') == NULL
-		|| ft_strchr(map_data->map, '0') == NULL)
-		err_handling("map should contain all elements.");
-	free_dp(temp);
-}
 
 void	init_map(char *map_path, t_map_data *map_data)
 {
@@ -69,7 +36,7 @@ void	init_map(char *map_path, t_map_data *map_data)
 	ft_strlcpy(map_data->initial_map, map_data->map, len);
 }
 
-void	load_player(t_map_data *map_data, int *pos_x, int *pos_y)
+void	load_pimg(t_map_data *map_data, int *pos_x, int *pos_y)
 {
 	static int	frame = 0;
 
@@ -145,7 +112,7 @@ void	load_map(t_map_data *map_data)
 			pos_y += 32;
 		}
 		else if (map_data->map[i] == 'P')
-			load_player(map_data, &pos_x, &pos_y);
+			load_pimg(map_data, &pos_x, &pos_y);
 		else
 			load_img(map_data->base_imgs, map_data->map[i], &pos_x, &pos_y);
 		i++;

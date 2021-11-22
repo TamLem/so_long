@@ -2,7 +2,7 @@
 
 //-  avoid overlapping of mons
 //-  collectibe apearing after being collected and crossed by the player
-//- mon still eating coll
+//- 'M' still eating coll
 //- escape game key
 - improve mons tracking
 - check map
@@ -14,11 +14,12 @@
 - exit and free functions
 - fix seg faults
 - door images
+- take map from argv
+- norminette
+- subdivide header functions
 
 ====== TODO ===========
 
-- take map from argv
-- norminette
 - mandatory part
 
 ====== Fixed Errors =====

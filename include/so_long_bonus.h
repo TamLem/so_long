@@ -1,5 +1,5 @@
-#ifndef SO_LONG_H
-# define SO_LONG_H
+#ifndef SO_LONG_BONUS_H
+# define SO_LONG_BONUS_H
 
 # include <unistd.h>
 # include <stdio.h>
@@ -50,14 +50,17 @@ t_game		g_game;
 # define P_R1 "assets/pacman/pacman_right/r1.xpm"
 # define P_R2 "assets/pacman/pacman_right/r2.xpm"
 # define P_R3 "assets/pacman/pacman_right/r3.xpm"
+
 # define P_L0 "assets/pacman/pacman_left/l0.xpm"
 # define P_L1 "assets/pacman/pacman_left/l1.xpm"
 # define P_L2 "assets/pacman/pacman_left/l2.xpm"
 # define P_L3 "assets/pacman/pacman_left/l3.xpm"
+
 # define P_U0 "assets/pacman/pacman_up/u0.xpm"
 # define P_U1 "assets/pacman/pacman_up/u1.xpm"
 # define P_U2 "assets/pacman/pacman_up/u2.xpm"
 # define P_U3 "assets/pacman/pacman_up/u3.xpm"
+
 # define P_D0 "assets/pacman/pacman_down/d0.xpm"
 # define P_D1 "assets/pacman/pacman_down/d1.xpm"
 # define P_D2 "assets/pacman/pacman_down/d2.xpm"
@@ -70,7 +73,6 @@ t_game		g_game;
 # define DOOR_O "assets/pacman/door1.xpm"
 # define MON_IMG "assets/pacman/mon.xpm"
 # define END "assets/pacman/game_end.xpm"
-
 # define ZERO "assets/pacman/nums/0.xpm"
 # define ONE "assets/pacman/nums/1.xpm"
 # define TWO "assets/pacman/nums/2.xpm"
